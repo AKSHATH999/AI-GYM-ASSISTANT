@@ -1,15 +1,17 @@
 import { drawPose } from "./drawing";
-import { createPoseDetector } from "./poseDetector";
+import { createPoseLandmarker } from "./poseDetector";
 
 export async function startPoseTracking(
   video: HTMLVideoElement,
   canvas: HTMLCanvasElement
 ) {
-  const detector = await createPoseDetector();
+  const detector = await createPoseLandmarker();
 
   const ctx = canvas.getContext("2d");
 
   if (!ctx) return;
+
+  const context = ctx;
 
   async function detect() {
     if (video.readyState >= 2) {
@@ -23,7 +25,7 @@ export async function startPoseTracking(
 
       if (result.landmarks.length > 0) {
         drawPose(
-          ctx,
+          context,
           result.landmarks[0],
           canvas.width,
           canvas.height
